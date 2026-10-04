@@ -33,7 +33,7 @@ module "grafana" {
 }
 
 module "n8n" {
-  source = "./modules/sonarqube"
+  source = "./modules/n8n"
   depends_on = [module.grafana]
 }
 
