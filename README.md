@@ -2,7 +2,7 @@
 
 
 
-## AWS | EKS N8N Workflow
+## AWS | N8N Workflow Automation
 SonarQube is a code quality and application security platform. It analyzes your source code and finds problems before the code reaches production.
 
 
