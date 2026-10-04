@@ -5,9 +5,63 @@ resource "kubernetes_namespace" "n8n" {
   }
 }
 
-# ---------------------------------------------------------
+# =========================================================
+# n8n core secret
+# =========================================================
+
+resource "kubernetes_secret" "n8n" {
+  metadata {
+    name      = "n8n-secrets"
+    namespace = kubernetes_namespace.n8n.metadata[0].name
+  }
+
+  type = "Opaque"
+
+  data = {
+    N8N_ENCRYPTION_KEY = var.n8n_encryption_key
+    N8N_HOST           = var.n8n_hostname
+    N8N_PROTOCOL       = "https"
+    N8N_PORT           = "5678"
+  }
+}
+
+# =========================================================
+# PostgreSQL password
+# =========================================================
+
+resource "kubernetes_secret" "n8n_db_password" {
+  metadata {
+    name      = "n8n-db-password"
+    namespace = kubernetes_namespace.n8n.metadata[0].name
+  }
+
+  type = "Opaque"
+
+  data = {
+    password = var.postgres_password
+  }
+}
+
+# =========================================================
+# Redis password
+# =========================================================
+
+resource "kubernetes_secret" "n8n_redis_password" {
+  metadata {
+    name      = "n8n-redis-password"
+    namespace = kubernetes_namespace.n8n.metadata[0].name
+  }
+
+  type = "Opaque"
+
+  data = {
+    password = var.redis_password
+  }
+}
+
+# =========================================================
 # PostgreSQL
-# ---------------------------------------------------------
+# =========================================================
 
 resource "helm_release" "postgresql" {
   name       = "postgresql"
@@ -37,9 +91,9 @@ resource "helm_release" "postgresql" {
   ]
 }
 
-# ---------------------------------------------------------
+# =========================================================
 # Redis
-# ---------------------------------------------------------
+# =========================================================
 
 resource "helm_release" "redis" {
   name       = "redis"
@@ -70,9 +124,9 @@ resource "helm_release" "redis" {
   ]
 }
 
-# ---------------------------------------------------------
+# =========================================================
 # n8n
-# ---------------------------------------------------------
+# =========================================================
 
 resource "helm_release" "n8n" {
   name       = "n8n"
@@ -86,20 +140,14 @@ resource "helm_release" "n8n" {
 
   values = [
     templatefile("${path.module}/values-n8n.yaml", {
-      postgres_host     = "postgresql.n8n.svc.cluster.local"
-      postgres_database = "n8n"
-      postgres_user     = "n8n"
-      postgres_password = var.postgres_password
-
-      redis_host     = "redis-master.n8n.svc.cluster.local"
-      redis_port     = 6379
-      redis_password = var.redis_password
-
       n8n_hostname = var.n8n_hostname
     })
   ]
 
   depends_on = [
+    kubernetes_secret.n8n,
+    kubernetes_secret.n8n_db_password,
+    kubernetes_secret.n8n_redis_password,
     helm_release.postgresql,
     helm_release.redis
   ]
