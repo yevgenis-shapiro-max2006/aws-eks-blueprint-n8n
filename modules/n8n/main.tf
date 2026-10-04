@@ -30,7 +30,7 @@ resource "helm_release" "postgresql" {
       primary = {
         persistence = {
           enabled = true
-          size    = "20Gi"
+          size    = "10Gi"
         }
       }
     })
@@ -63,7 +63,7 @@ resource "helm_release" "redis" {
       master = {
         persistence = {
           enabled = true
-          size    = "8Gi"
+          size    = "10Gi"
         }
       }
     })
