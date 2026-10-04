@@ -85,7 +85,7 @@ resource "helm_release" "n8n" {
   timeout = 900
 
   values = [
-    templatefile("${path.module}/values/n8n.yaml", {
+    templatefile("${path.module}/values-n8n.yaml", {
       postgres_host     = "postgresql.n8n.svc.cluster.local"
       postgres_database = "n8n"
       postgres_user     = "n8n"
