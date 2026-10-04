@@ -52,7 +52,7 @@ webhook:
 ingress:
   enabled: true
 
-  className: nginx
+  className: kong
 
   hosts:
     - host: ${n8n_hostname}
