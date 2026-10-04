@@ -42,4 +42,3 @@ module "ingress" {
   depends_on = [module.n8n]
 }
 
-
