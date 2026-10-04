@@ -22,3 +22,4 @@ resource "helm_release" "keda" {
     })
   ]
 }
+
