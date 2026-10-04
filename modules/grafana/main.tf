@@ -5,7 +5,7 @@ resource "helm_release" "grafana" {
 
   repository = "https://grafana.github.io/helm-charts"
   chart      = "grafana"
-  version    = "9.3.2"
+  #version    = "9.3.2"
 
   create_namespace = true
 
