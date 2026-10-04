@@ -92,6 +92,7 @@ resource "helm_release" "n8n" {
       postgres_password = var.postgres_password
 
       redis_host     = "redis-master.n8n.svc.cluster.local"
+      redis_port     = 6379
       redis_password = var.redis_password
 
       n8n_hostname = var.n8n_hostname
